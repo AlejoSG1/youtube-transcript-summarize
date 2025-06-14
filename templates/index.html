@@ -15,8 +15,8 @@
 
     <form id="formulario" class="mb-4">
       <div class="mb-3">
-        <label for="videoId" class="form-label">ID del Video de YouTube</label>
-        <input type="text" class="form-control" id="videoId" placeholder="Ej: j-55ZnCcNIs" required>
+        <label for="videoUrl" class="form-label">Link del Video de YouTube</label>
+        <input type="text" class="form-control" id="videoUrl" placeholder="Ej: https://youtu.be/KYs3M_qB6hs" required>
       </div>
       <button type="submit" class="btn btn-primary">Obtener Transcripción</button>
     </form>
@@ -32,9 +32,9 @@
       e.preventDefault();
       resultado.textContent = 'Cargando...';
 
-      const videoId = document.getElementById('videoId').value;
+      const url = document.getElementById('videoUrl').value;
       try {
-        const res = await fetch(`/transcripcion/${videoId}`);
+        const res = await fetch(`/transcripcion?url=${encodeURIComponent(url)}`);
         const data = await res.json();
 
         if (res.ok) {
