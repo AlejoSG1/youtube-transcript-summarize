@@ -45,6 +45,3 @@ def obtener_transcripcion():
         return jsonify({"error": "No se encontró transcripción para este video."}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=False)
