@@ -8,8 +8,8 @@ app = Flask(__name__)
 
 # Configuración del proxy residencial
 proxy_config = GenericProxyConfig(
-    http_url="http://brd-customer-hl_f7c60629-zone-residential_proxy1:mnx456wtp34s@brd.superproxy.io:33335",
-    https_url="http://brd-customer-hl_f7c60629-zone-residential_proxy1:mnx456wtp34s@brd.superproxy.io:33335",
+    http_url="http://brd-customer-hl_f7c60629-zone-residential_proxy1-country-us:mnx456wtp34s@brd.superproxy.io:33335",
+    https_url="https://brd-customer-hl_f7c60629-zone-residential_proxy1-country-us:mnx456wtp34s@brd.superproxy.io:33335",
 )
 
 # Instancia personalizada del API con proxy
