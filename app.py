@@ -1,19 +1,24 @@
 from flask import Flask, render_template, jsonify, request
 from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api.proxies import GenericProxyConfig
 from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound
 import re
 
 app = Flask(__name__)
 
+# Configuración del proxy residencial
+proxy_config = GenericProxyConfig(
+    http_url="http://brd-customer-hl_f7c60629-zone-residential_proxy1:mnx456wtp34s@brd.superproxy.io:33335",
+    https_url="http://brd-customer-hl_f7c60629-zone-residential_proxy1:mnx456wtp34s@brd.superproxy.io:33335",
+)
+
+# Instancia personalizada del API con proxy
+ytt_api = YouTubeTranscriptApi(proxy_config=proxy_config)
+
 def extraer_video_id(youtube_url):
-    """
-    Extrae el ID del video desde URLs como:
-    https://www.youtube.com/watch?v=KYs3M_qB6hs
-    https://youtu.be/KYs3M_qB6hs
-    """
     patrones = [
-        r"v=([a-zA-Z0-9_-]{11})",       # youtube.com/watch?v=...
-        r"youtu\.be/([a-zA-Z0-9_-]{11})"  # youtu.be/...
+        r"v=([a-zA-Z0-9_-]{11})",
+        r"youtu\.be/([a-zA-Z0-9_-]{11})"
     ]
     for patron in patrones:
         coincidencia = re.search(patron, youtube_url)
@@ -36,7 +41,7 @@ def obtener_transcripcion():
         return jsonify({"error": "No se pudo extraer el ID del video de la URL proporcionada."}), 400
 
     try:
-        fetched_transcript = YouTubeTranscriptApi.get_transcript(video_id)
+        fetched_transcript = ytt_api.get_transcript(video_id)
         texto_completo = " ".join(snippet['text'] for snippet in fetched_transcript)
         return jsonify({"video_id": video_id, "transcripcion": texto_completo})
     except TranscriptsDisabled:
